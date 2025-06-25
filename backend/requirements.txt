@@ -1,0 +1,6 @@
+redis
+cantools
+python-can
+openpyxl
+uvicorn
+fastapi
