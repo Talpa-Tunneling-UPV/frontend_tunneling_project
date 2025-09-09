@@ -38,23 +38,23 @@ export const EventLog = ({ events }: Props) => {
     }
     
     return (
-        <div className="w-full max-h-[100vh] overflow-hidden overflow-y-scroll rounded-lg border border-gray-200 bg-white shadow-md dark:border-gray-700 dark:bg-gray-800">
-            {/* Header similar to Gmail's top bar */}
-            <div className="border-b sticky top-0 bg-card border-gray-200 p-4 dark:border-gray-700">
+        <div className="w-full max-h-[100vh] overflow-hidden overflow-y-scroll rounded-lg border border-border bg-card shadow-md">
+            {/* Header */}
+            <div className="border-b sticky top-0 bg-card border-border p-4">
                 <h2 className="text-xl font-semibold text-gray-900 dark:text-gray-100">Registro de Eventos</h2>
                 <p className="text-sm text-gray-500 dark:text-gray-400">Actividad reciente del sistema.</p>
             </div>
 
             {/* Event List Area */}
             <div className="w-full">
-                {events.length === 0 ? (
-                <p className="p-4 text-center text-gray-500 dark:text-gray-400">No hay eventos para mostrar.</p>
+        {events.length === 0 ? (
+        <p className="p-4 text-center text-muted-foreground">No hay eventos para mostrar.</p>
                 ) : (
                 <div>
                     {events.map((event) => (
                     <div
                         key={event.id}
-                        className="flex cursor-pointer items-center justify-between border-b border-gray-100 p-3 transition-colors hover:bg-gray-50 dark:border-gray-700 dark:hover:bg-gray-700"
+            className="flex cursor-pointer items-center justify-between border-b border-border p-3 transition-colors hover:bg-muted/50"
                     >
                         {/* Icon and Event Description */}
                         <div className="flex flex-1 items-center space-x-3 pr-4">
@@ -63,7 +63,7 @@ export const EventLog = ({ events }: Props) => {
                         </div>
                         {/* Timestamp */}
                         <div className="flex-shrink-0 text-right">
-                        <p className="text-xs text-gray-500 dark:text-gray-400">{event.timestamp}</p>
+            <p className="text-xs text-muted-foreground">{event.timestamp}</p>
                         </div>
                     </div>
                     ))}

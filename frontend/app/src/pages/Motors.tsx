@@ -33,11 +33,6 @@
   - Este componente usa h-full. El alto total lo pone el layout global
     (TopBar + contenido) para evitar doble scroll.
 
-  Cosas a tener en cuenta
-  - React Leaflet v5 no trae clusters: tiramos del plugin leaflet.markercluster.
-  - Si instalas @types/leaflet.markercluster tendrás tipos mejores que el (any)
-    que ves por aquí en la integración del grupo de clusters.
-
   Datos desde la API (lo que esperamos)
   - Nodos (GET /api/motors/nodes):
     [
@@ -53,8 +48,6 @@
         updatedAt?: string       // ISO opcional
       }, ...
     ]
-    Nota: si el backend prefiere [x, y], aquí convertimos a [y, x]. Si el backend
-    devuelve coordenadas normalizadas (0..1), basta multiplicar por ancho/alto.
 
   - Plano (opcional, GET /api/motors/plan):
     { imageUrl: string, width?: number, height?: number }

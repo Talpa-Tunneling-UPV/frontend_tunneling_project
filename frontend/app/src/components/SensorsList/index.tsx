@@ -142,7 +142,7 @@ export const SensorsList = ({data}: {data: sensorInterface[]}) => {
               <div className="flex items-center space-x-6">
                 <div className="text-center">
                   <p className="text-sm font-medium text-foreground">
-                    Value:{" "}
+                    Valor:{" "}
                     <span className="font-bold text-lg">
                       {sensor.value + sensor.units}
                     </span>

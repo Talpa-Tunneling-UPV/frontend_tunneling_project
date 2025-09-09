@@ -1,7 +1,8 @@
-import { useEffect, useState } from "react";
-import { CartesianGrid, Line, LineChart, ResponsiveContainer, XAxis, YAxis } from "recharts";
+import { useState } from "react";
+import { CartesianGrid, Line, LineChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
+import { ProgressBar } from "./ProgressBar";
 
-interface DataPoint {
+export interface DataPoint {
     name: string;
     presion: number;
     torque: number;
@@ -9,48 +10,18 @@ interface DataPoint {
     temperatura: number;
 }
 
-export const DashboardGraphic = () => {
+/**
+ * Props mínimos para el DashboardGraphic:
+ * - data: DataPoint[]  -> Serie estática con las claves: name, presion, torque, velocidad, temperatura.
+ */
+interface Props { data: DataPoint[] }
+export const DashboardGraphic = ({ data }: Props) => {
 
     const [activeTab, setActiveTab] = useState('Presion');
-  const [data, setData] = useState<DataPoint[]>([]);
 
   const tabs = ['Presion', 'Torque', 'Velocidad', 'Temperatura'];
 
-  // Simular datos en tiempo real
-  useEffect(() => {
-    const generateInitialData = () => {
-      const initialData: DataPoint[] = [];
-      for (let i = 0; i < 10; i++) {
-        initialData.push({
-          name: 'Text',
-          presion: Math.random() * 100 + 25,
-          torque: Math.random() * 80 + 20,
-          velocidad: Math.random() * 120 + 30,
-          temperatura: Math.random() * 90 + 10,
-        });
-      }
-      setData(initialData);
-    };
-
-    generateInitialData();
-
-    // Actualizar datos cada 2 segundos
-    const interval = setInterval(() => {
-      setData(prevData => {
-        const newData = [...prevData.slice(1)];
-        newData.push({
-          name: 'Text',
-          presion: Math.random() * 100 + 25,
-          torque: Math.random() * 80 + 20,
-          velocidad: Math.random() * 120 + 30,
-          temperatura: Math.random() * 90 + 10,
-        });
-        return newData;
-      });
-    }, 2000);
-
-    return () => clearInterval(interval);
-  }, []);
+  // 'data' ahora viene como prop desde Home
 
   const getLineColor = (tab: string) => {
     const colors = {
@@ -72,12 +43,58 @@ export const DashboardGraphic = () => {
     return keys[tab as keyof typeof keys] || 'presion';
   };
 
+  // Tooltip personalizado similar al del ModalSensor
+  const CustomTooltip = ({ active, payload, label }: any) => {
+    if (!active || !payload || !payload.length) return null;
+    const val = payload[0]?.value as number;
+
+    const status = val >= 90 ? {
+      text: "Crítico",
+      dotClass: "bg-red-500",
+      textClass: "text-red-600"
+    } : val >= 75 ? {
+      text: "Advertencia",
+      dotClass: "bg-amber-400",
+      textClass: "text-amber-500"
+    } : {
+      text: "Normal",
+      dotClass: "bg-emerald-400",
+      textClass: "text-emerald-500"
+    };
+
+    const clamped = Math.min(100, Math.max(0, Number(val)));
+
+    return (
+      <div
+        className="rounded-lg shadow-xl border border-border bg-white text-[#111827] p-3 min-w-[180px] backdrop-blur-md"
+        style={{
+          backgroundColor: "var(--card)",
+          color: "#ffffff",
+        }}
+      >
+        <div className="flex items-center justify-between mb-2">
+          <span className="text-xs text-muted-foreground">{label}</span>
+          <div className="flex items-center gap-2">
+            <span className={`inline-flex items-center gap-1 text-xs font-medium ${status.textClass}`}>
+              <span className={`w-2 h-2 rounded-full ${status.dotClass}`} />
+              {status.text}
+            </span>
+          </div>
+        </div>
+        <div className="flex items-end gap-1">
+          <span className="text-3xl font-bold leading-none">{Number(val).toFixed(0)}</span>
+        </div>
+        <div className="mt-3">
+          <ProgressBar currentValue={clamped} maxValue={100} />
+        </div>
+      </div>
+    )
+  }
+
   return (
     <div className="w-full max-w-4xl mx-auto p-6 bg-card rounded-lg shadow-lg">
       {/* Título */}
-      <h1 className="text-2xl font-bold text-foreground mb-6">
-        Monitoreo en tiempo real
-      </h1>
+  <h1 className="text-2xl font-bold text-foreground mb-6">Tendencias de sensores</h1>
 
       {/* Pestañas */}
       <div className="mb-6">
@@ -111,22 +128,27 @@ export const DashboardGraphic = () => {
             }}
           >
             <CartesianGrid 
-              strokeDasharray="3 3" 
-              stroke="hsl(var(--border))" 
-              strokeOpacity={0.5}
+              strokeDasharray="4 4" 
+              stroke="#ffffff" 
+              opacity={0.15}
             />
             <XAxis 
               dataKey="name" 
               axisLine={false}
               tickLine={false}
-              tick={{ fontSize: 12, fill: 'hsl(var(--muted-foreground))' }}
+              tick={{ fontSize: 12, fill: '#ffffff' }}
             />
             <YAxis 
-              domain={[0, 125]}
+              domain={[0, 100]}
               axisLine={false}
               tickLine={false}
-              tick={{ fontSize: 12, fill: 'hsl(var(--muted-foreground))' }}
-              ticks={[0, 25, 50, 75, 100, 125]}
+              tick={{ fontSize: 12, fill: '#ffffff' }}
+              ticks={[0, 25, 50, 75, 100]}
+            />
+            <Tooltip
+              content={<CustomTooltip />}
+              cursor={{ stroke: "#ffffff", strokeWidth: 1, strokeOpacity: 0.2 }}
+              wrapperStyle={{ outline: "none" }}
             />
             
             {/* Línea principal del tab activo */}
@@ -134,20 +156,16 @@ export const DashboardGraphic = () => {
               type="monotone"
               dataKey={getDataKey(activeTab)}
               stroke={getLineColor(activeTab)}
-              strokeWidth={3}
-              dot={false}
-              activeDot={{ 
-                r: 4, 
-                fill: getLineColor(activeTab),
-                stroke: '#fff',
-                strokeWidth: 2
-              }}
+              strokeWidth={2.5}
+              dot={{ fill: getLineColor(activeTab), strokeWidth: 0, r: 3 }}
+              activeDot={{ r: 5, fill: '#ffffff' }}
+              isAnimationActive={true}
             />
             
             {/* Líneas de fondo más tenues para otros parámetros */}
             {tabs
               .filter(tab => tab !== activeTab)
-              .map((tab, index) => (
+              .map((tab) => (
                 <Line
                   key={tab}
                   type="monotone"
@@ -163,13 +181,7 @@ export const DashboardGraphic = () => {
         </ResponsiveContainer>
       </div>
 
-      {/* Indicador de estado */}
-      <div className="mt-4 flex items-center justify-center">
-        <div className="flex items-center space-x-2">
-          <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
-          <span className="text-sm text-muted-foreground">Actualizando en tiempo real</span>
-        </div>
-      </div>
+  {/* Indicador de estado eliminado: datos estáticos */}
     </div>
   );
     

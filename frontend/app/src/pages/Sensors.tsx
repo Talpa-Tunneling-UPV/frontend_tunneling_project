@@ -3,6 +3,65 @@ import { SensorsList } from "../components/SensorsList"
 import { StatusSensors } from "../components/StatusSensors"
 import type { sensorInterface } from "../types"
 
+/**
+ * Integración API + WebSocket (Redis pub/sub) para Sensores — sin polling
+ *
+ * Objetivo: snapshot inicial por REST con TanStack Query y tiempo real por WS.
+ *
+ * 1) Snapshot inicial (REST + TanStack Query)
+ *    - GET /api/sensors
+ *      200 OK: Array<sensorInterface>
+ *      Donde sensorInterface (simplificado) incluye:
+ *        {
+ *          id: string,
+ *          title: string,
+ *          value: number,
+ *          units: string,
+ *          status: 'online'|'advertencia'|'error'|'offline',
+ *          type: 'presion'|'temperatura'|'posicion'|'rotacion'|'caudal'|'gas',
+ *          updatedAt?: string
+ *        }
+ *    - Opción A: derivar en el cliente el resumen (StatusSensors) y alertas (SensorsAlertsList) a partir del array.
+ *    - Opción B (alternativa si quieres optimizar):
+ *        GET /api/sensors/summary → { online: number, advertencia: number, error: number, offline: number }
+ *        GET /api/sensors/alerts?limit=50 → Array<sensorInterface> (solo los que estén en advertencia|error)
+ *    - Histórico para modal (gráfica 24h por sensor):
+ *        GET /api/sensors/{id}/history?from=ISO&to=ISO&interval=1h
+ *        200 OK: Array<{ time: string, value: number }>
+ *
+ *    Ejemplo con TanStack Query (pseudocódigo):
+ *      const sensorsQuery = useQuery({
+ *        queryKey: ['sensors','all'],
+ *        queryFn: () => fetch('/api/sensors').then(r => r.json() as Promise<sensorInterface[]>),
+ *        staleTime: 60_000,         // cachea el snapshot
+ *        refetchOnWindowFocus: false,
+ *        refetchInterval: false     // sin polling
+ *      })
+ *
+ * 2) Tiempo real (WS con backend puente a Redis pub/sub)
+ *    - Conectar a wss://<host>/ws (o el endpoint que tengas)
+ *    - Suscribirte a los canales:
+ *        'sensors:values'   → actualizaciones de valor y estado de sensores
+ *        'sensors:alerts'   → (opcional) nuevos sensores en advertencia/error
+ *    - Mensaje esperado (ejemplo):
+ *        { channel: 'sensors:values', payload: { id: string, value: number, status?: string, updatedAt?: string } }
+ *        { channel: 'sensors:alerts', payload: sensorInterface }
+ *    - Integración con TanStack Query: actualizar caches en onmessage sin re-fetch:
+ *        queryClient.setQueryData(['sensors','all'], (prev = []) =>
+ *          prev.map(s => s.id === payload.id ? { ...s, value: payload.value, status: payload.status ?? s.status, updatedAt: payload.updatedAt } : s)
+ *        )
+ *        queryClient.setQueryData(['sensors','alerts',{ limit: 50 }], (prev = []) =>
+ *          // decide si insertar/quitar según nuevo estado
+ *        )
+ *    - Para histórico del modal en tiempo real (si quieres stream por sensor):
+ *        Canal dedicado p.ej. `sensors:history:{id}`
+ *        payload: { time: string, value: number }
+ *
+ * 3) Umbrales/negocio (dónde decidir alertas)
+ *    - Puedes enviar `status` ya calculado desde el backend (recomendado) según tus umbrales.
+ *    - O enviar thresholds junto a cada sensor y valorar en el cliente.
+ *
+ */
 
 const data: sensorInterface[] = [
   {
@@ -108,7 +167,13 @@ const data: sensorInterface[] = [
 
 export const Sensors = () => {
 
-  //! TODO: implementar la petición API
+  //! TODO: Integración
+  // - Cargar snapshot inicial con TanStack Query: ['sensors','all']
+  // - Abrir WS y suscribirse a 'sensors:values' y (opcional) 'sensors:alerts'
+  // - En cada mensaje, actualizar la cache de Query para reflejar en StatusSensors, SensorsAlertsList y SensorsList.
+  // - Para ModalSensor (cuando abras el modal):
+  //     GET /api/sensors/{id}/history?from&to&interval (Query sin polling, staleTime: Infinity)
+  //     y/o suscripción temporal al canal `sensors:history:{id}` para push.
 
 
   return (
