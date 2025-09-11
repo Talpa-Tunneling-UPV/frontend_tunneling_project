@@ -93,11 +93,6 @@ export const Home = () => {
   
   console.log(import.meta.env)
 
-  const {data: metrics, isLoading} = useQuery({
-    queryKey: [apiUtils.apiMethods["getMetrics"]],
-    queryFn: () => apiUtils.api["getMetrics"](),
-
-  })
   const events: EventLogItem[] = DEMO_EVENTS
   const DASHBOARD_DATA: DataPoint[] = [
     { name: '00:00', presion: 20, torque: 35, velocidad: 40, temperatura: 22 },
@@ -114,12 +109,10 @@ export const Home = () => {
     { name: '11:00', presion: 92, torque: 86, velocidad: 88, temperatura: 50 },
   ]
 
-  if (isLoading || !metrics) return <div>Loading...</div>
-
   return (
     <div className="h-[100vh] flex flex-col w-[100%] bg-background p-4 overflow-scroll">
   <div className="grid grid-cols-4 gap-4">
-      {metrics.map(metric => (
+      {DEMO_METRICS.map(metric => (
                 <div key={metric.title} className="rounded-xl border border-accent bg-card text-card-foreground shadow @container/card">
                     <div className="flex flex-col space-y-1.5 p-6 relative">
                         <div className="text-sm text-muted-foreground">

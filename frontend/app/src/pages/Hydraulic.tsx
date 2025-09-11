@@ -241,4 +241,3 @@ export const Hydraulic = () => {
   );
 }
 
-/* No subcomponentes locales; se usan componentes/ tipos compartidos */
