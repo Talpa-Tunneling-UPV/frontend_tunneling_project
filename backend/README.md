@@ -43,4 +43,4 @@ Devolverá:
 
 {"VBattery":"24585","VCell0":"80","VCell1":"80","VCell2":"80","VCell3":"80","VCell4":"80","VCell5":"80"}
 
-//Fin
+//Fin del documento 
