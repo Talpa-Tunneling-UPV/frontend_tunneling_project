@@ -1,8 +1,6 @@
-import { useQuery } from "@tanstack/react-query"
 import { DashboardGraphic, type DataPoint } from "../components/DashboardGraphic"
 import { EventLog } from "../components/EventLog"
 import { ProgressBar } from "../components/ProgressBar"
-import { apiUtils } from "../api/api"
 
 type eventType = "info" | "warning" | "error"
 
@@ -110,29 +108,40 @@ export const Home = () => {
   ]
 
   return (
-    <div className="h-[100vh] flex flex-col w-[100%] bg-background p-4 overflow-scroll">
-  <div className="grid grid-cols-4 gap-4">
-      {DEMO_METRICS.map(metric => (
-                <div key={metric.title} className="rounded-xl border border-accent bg-card text-card-foreground shadow @container/card">
-                    <div className="flex flex-col space-y-1.5 p-6 relative">
-                        <div className="text-sm text-muted-foreground">
-                            {metric.title}
-                        </div>
-                        <div className="tracking-tight @[250px]/card:text-3xl text-2xl font-semibold tabular-nums">
-                            {`${metric.value} ${metric.measure}`}
-                        </div>
-                    </div>
-                    <div className="flex p-6 pt-0 flex-col items-start gap-1 text-sm">
-                        <ProgressBar maxValue={metric.maxValue} currentValue={metric.value} />
-                    </div>
-                </div>
-            ))}
+    <div className="h-full flex flex-col w-full bg-background overflow-hidden">
+      <h1 className="text-xl lg:text-2xl font-bold text-foreground p-3 lg:p-4 pb-2 flex-shrink-0">
+        Dashboard
+      </h1>
+      <div className="flex-1 overflow-hidden px-3 lg:px-4 pb-3 lg:pb-4 min-h-0">
+        {/* Métricas principales */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 flex-shrink-0">
+        {DEMO_METRICS.map(metric => (
+          <div key={metric.title} className="rounded-lg border border-accent bg-card text-card-foreground shadow @container/card">
+            <div className="flex flex-col space-y-1 p-3 relative">
+              <div className="text-xs text-muted-foreground">
+                {metric.title}
+              </div>
+              <div className="tracking-tight @[250px]/card:text-xl text-lg font-semibold tabular-nums">
+                {`${metric.value} ${metric.measure}`}
+              </div>
+            </div>
+            <div className="flex p-3 pt-0 flex-col items-start gap-1 text-sm">
+              <ProgressBar maxValue={metric.maxValue} currentValue={metric.value} />
+            </div>
+          </div>
+        ))}
+      </div>
+      
+      {/* Gráficos y logs - área flexible */}
+      <div className="grid grid-cols-1 xl:grid-cols-2 gap-3 mt-3 flex-1 min-h-0 overflow-hidden">
+        <div className="min-h-0">
+          <DashboardGraphic data={DASHBOARD_DATA} />
         </div>
-    <div className="grid grow-1 grid-cols-2 gap-4 mt-4 max-h-12">
-      <DashboardGraphic data={DASHBOARD_DATA} />
-      <EventLog events={events} />
-
+        <div className="min-h-0">
+          <EventLog events={events} />
         </div>
+      </div>
+      </div>
     </div>
   )
 }

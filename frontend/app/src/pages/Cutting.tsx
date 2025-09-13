@@ -57,13 +57,17 @@ export const Cutting = () => {
   const spinPeriodSec = useSpinPeriod(cuttingData.rpm, cuttingData.isRunning && spinEnabled, 4, 8);
 
   return (
-    <div className="h-screen w-full flex items-center justify-center bg-background">
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+    <div className="h-full w-full flex flex-col bg-background overflow-hidden">
+      <h1 className="text-xl lg:text-2xl font-bold text-foreground p-3 lg:p-4 pb-2 flex-shrink-0">
+        Sistema de Corte
+      </h1>
+      <div className="flex-1 overflow-hidden px-3 lg:px-4 pb-3 lg:pb-4 min-h-0 flex items-center justify-center">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 lg:gap-6 max-w-6xl w-full">
         {/* Left Card: imagen con animación y toggle de UI */}
-        <div className="bg-card border border-border rounded-xl p-8 flex items-center justify-center">
-          <div className="text-center space-y-4">
-            <div className="flex items-center justify-between gap-4 mb-2">
-              <h3 className="text-xl font-semibold text-foreground">Corona de Corte</h3>
+        <div className="bg-card border border-border rounded-xl p-6 flex items-center justify-center">
+          <div className="text-center space-y-3">
+            <div className="flex items-center justify-between gap-3 mb-2">
+              <h3 className="text-lg font-semibold text-foreground">Corona de Corte</h3>
               {/* Toggle para activar/desactivar solo la animación visual */}
               <label className="flex items-center gap-2 text-xs text-muted-foreground select-none">
                 Giro visual
@@ -86,7 +90,7 @@ export const Cutting = () => {
             </div>
 
             {/* Imagen de la corona: gira solo si isRunning y el toggle están activos */}
-            <div className="relative w-80 h-80 mx-auto">
+            <div className="relative w-48 h-48 lg:w-64 lg:h-64 mx-auto">
               <img
                 src="/cutting_head.png"
                 alt="Corona de Corte"
@@ -111,23 +115,23 @@ export const Cutting = () => {
         </div>
 
         {/* Right Card: parámetros con ProgressBar */}
-        <div className="bg-card border border-border rounded-xl p-8">
-          <div className="flex items-center justify-between mb-6">
-            <h3 className="text-xl font-semibold text-foreground">Parámetros de Operación</h3>
+        <div className="bg-card border border-border rounded-xl p-6">
+          <div className="flex items-center justify-between mb-4">
+            <h3 className="text-lg font-semibold text-foreground">Parámetros de Operación</h3>
             <span className={`text-xs font-semibold px-2 py-1 rounded-full border ${levelChipCls(worst)}`}>
               {worst === "ok" ? "Estable" : worst === "warn" ? "Vigilar" : "Intervenir"}
             </span>
           </div>
 
           {/* KPIs principales */}
-          <div className="grid grid-cols-3 gap-4 mb-6">
+          <div className="grid grid-cols-3 gap-3 mb-4">
             <Kpi label="Vel. Rotación" value={`${cuttingData.rpm.toFixed(1)} RPM`} />
             <Kpi label="Torque" value={`${cuttingData.torque.toFixed(0)} Nm`} />
             <Kpi label="Presión Cabezal" value={`${cuttingData.cutterPressure.toFixed(0)} bar`} />
           </div>
 
       {/* Filas con etiqueta + valor + ProgressBar (usa tus tokens y escalas) */}
-          <div className="space-y-5">
+          <div className="space-y-3">
             <div className="space-y-2">
               <div className="flex justify-between items-center">
                 <span className="text-sm font-medium text-muted-foreground">Temperatura</span>
@@ -170,17 +174,18 @@ export const Cutting = () => {
           </div>
 
           {/* Métricas adicionales compactas */}
-          <div className="grid grid-cols-2 gap-4 pt-6 mt-6 border-t border-border">
-            <div className="text-center p-4 bg-muted/60 border border-border/60 rounded-lg">
-              <div className={`text-2xl font-bold ${levelTextCls(tempLv)}`}>{cuttingData.temperature.toFixed(1)}°C</div>
+          <div className="grid grid-cols-2 gap-3 pt-4 mt-4 border-t border-border">
+            <div className="text-center p-3 bg-muted/60 border border-border/60 rounded-lg">
+              <div className={`text-lg font-bold ${levelTextCls(tempLv)}`}>{cuttingData.temperature.toFixed(1)}°C</div>
               <div className="text-xs text-muted-foreground">Temp. Cabezal</div>
             </div>
-            <div className="text-center p-4 bg-muted/60 border border-border/60 rounded-lg">
-              <div className={`text-2xl font-bold ${levelTextCls(wearLv)}`}>{cuttingData.wearLevel}%</div>
+            <div className="text-center p-3 bg-muted/60 border border-border/60 rounded-lg">
+              <div className={`text-lg font-bold ${levelTextCls(wearLv)}`}>{cuttingData.wearLevel}%</div>
               <div className="text-xs text-muted-foreground">Desgaste</div>
             </div>
           </div>
         </div>
+      </div>
       </div>
     </div>
   );

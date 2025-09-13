@@ -1,0 +1,10 @@
+[33m2fd6278[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m, [m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m)[m API deactivated
+[33m7ac4b71[m Cambios Irene | Prueba de que funciona
+[33m04c8164[m Cambios Irene |
+[33m611711e[m refactor frontend and django installed
+[33me71a841[m Frontend modified
+[33m45615b8[m Solucionados errores docker. Todo funcionando OK
+[33m3144684[m eliminados archivos innecesarios
+[33mabc4919[m Solucionado interfaz CAN.
+[33m9fa300d[m Creados Dockerfiles y docker-compose + solucionados algunos errores en backend. Falta averiguar como compartir interfaz CAN con contenedor backend
+[33m84d5464[m first commit

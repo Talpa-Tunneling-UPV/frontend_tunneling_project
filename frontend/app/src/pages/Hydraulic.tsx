@@ -94,68 +94,71 @@ export const Hydraulic = () => {
   const deltaTemp = useMemo(() => (temperatures.outlet - temperatures.inlet).toFixed(1), [temperatures]);
 
   return (
-  <div className="h-screen w-full overflow-hidden bg-background">
-      <div className="max-w-7xl mx-auto h-full flex flex-col">
-        <h1 className="text-3xl font-bold text-foreground p-6 pb-4">Sistema Hidráulico - Microtuneladora</h1>
-        <div className="flex-1 overflow-auto px-6 pb-6">
-        <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6">
+
+      <div className="h-full w-full flex flex-col bg-background overflow-hidden">
+
+        <h1 className="text-xl lg:text-2xl font-bold text-foreground p-3 lg:p-4 pb-2 flex-shrink-0">
+          Sistema Hidráulico
+        </h1>
+        <div className="flex-1 overflow-hidden px-3 lg:px-4 pb-3 lg:pb-4 min-h-0">
+        <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-3 lg:gap-4 h-full overflow-y-auto overflow-x-hidden">
           {/* Presiones del sistema */}
-          <div className="bg-card border border-border rounded-xl p-6 xl:col-span-2">
-            <div className="flex items-center justify-between mb-6">
-              <h2 className="text-xl font-semibold text-foreground">Presiones del sistema</h2>
+          <div className="bg-card border border-border rounded-xl p-4 xl:col-span-2 min-h-0">
+            <div className="flex items-center justify-between mb-4">
+              <h2 className="text-lg font-semibold text-foreground">Presiones del sistema</h2>
               <span className={`text-xs font-semibold px-2 py-1 rounded-full border ${levelChipCls(mainPressureLv)}`}>
                 Principal: {pressureData.main.toFixed(1)} bar
               </span>
             </div>
 
-            {/* Gauges de presión */}
-    <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+            {/* Gauges de presión - más compactos */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-3">
               <div className="flex flex-col items-center justify-center">
                 <Gauge
                   value={pressureData.main}
                   max={PRESSURE_MAX_MAIN}
-                  size={260}
-                  thickness={14}
+                  size={160}
+                  thickness={10}
                   label="Presión principal"
                   units="bar"
                   level={mainPressureLv}
-      labelClassName="fill-foreground text-[9px] font-medium"
-      valueClassName="text-sm font-semibold"
+                  labelClassName="fill-foreground text-[8px] font-medium"
+                  valueClassName="text-xs font-semibold"
                 />
               </div>
               <div className="flex flex-col items-center justify-center">
                 <Gauge
                   value={pressureData.return}
                   max={PRESSURE_MAX_RETURN}
-                  size={260}
-                  thickness={14}
+                  size={160}
+                  thickness={10}
                   label="Presión de retorno"
                   units="bar"
                   level={returnPressureLv}
-      labelClassName="fill-foreground text-[9px] font-medium"
-      valueClassName="text-sm font-semibold"
+                  labelClassName="fill-foreground text-[8px] font-medium"
+                  valueClassName="text-xs font-semibold"
                 />
               </div>
             </div>
 
-            {/* KPIs de presión */}
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-6">
-              <div className="text-center p-4 bg-muted/20 border border-border/60 rounded-lg">
-                <div className="text-lg font-bold text-foreground">{deltaPressure}</div>
-                <div className="text-xs text-muted-foreground">Dif. de presión</div>
+            {/* KPIs de presión - más compactos */}
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
+              <div className="text-center p-2 bg-muted/20 border border-border/60 rounded-lg">
+                <div className="text-sm font-bold text-foreground">{deltaPressure}</div>
+                <div className="text-xs text-muted-foreground">Dif. presión</div>
               </div>
-              <div className="text-center p-4 bg-muted/20 border border-border/60 rounded-lg">
-                <div className="text-lg font-bold text-foreground">
+              <div className="text-center p-2 bg-muted/20 border border-border/60 rounded-lg">
+                <div className="text-sm font-bold text-foreground">
                   {Math.round((pressureData.main / PRESSURE_MAX_MAIN) * 100)}%
                 </div>
-                <div className="text-xs text-muted-foreground">% de carga</div>
+                <div className="text-xs text-muted-foreground">% carga</div>
               </div>
-              <div className="text-center p-4 bg-muted/20 border border-border/60 rounded-lg">
-                <div className="text-lg font-bold text-primary">{systemData.flowRate.toFixed(1)}</div>
+              <div className="text-center p-2 bg-muted/20 border border-border/60 rounded-lg">
+                <div className="text-sm font-bold text-primary">{systemData.flowRate.toFixed(1)}</div>
                 <div className="text-xs text-muted-foreground">Flujo L/min</div>
               </div>
-              <div className="text-center p-4 bg-muted/20 border border-border/60 rounded-lg">
-                <div className={`text-lg font-bold ${levelTextCls(efficiencyLv)}`}>{systemData.efficiency.toFixed(2)}%</div>
+              <div className="text-center p-2 bg-muted/20 border border-border/60 rounded-lg">
+                <div className={`text-sm font-bold ${levelTextCls(efficiencyLv)}`}>{systemData.efficiency.toFixed(2)}%</div>
                 <div className="text-xs text-muted-foreground">Eficiencia</div>
               </div>
             </div>
@@ -165,21 +168,21 @@ export const Hydraulic = () => {
           <OilLevelsList oilTanks={oilLevels} />
 
           {/* Estado del sistema */}
-          <div className="bg-card border border-border rounded-xl p-6">
-            <h2 className="text-xl font-semibold text-foreground mb-6">Estado del sistema</h2>
-            <div className="space-y-4">
-              <div className="flex justify-between items-center p-3 bg-muted/20 rounded-lg">
-                <span className="text-sm text-muted-foreground">Viscosidad del aceite</span>
+          <div className="bg-card border border-border rounded-xl p-4 min-h-0">
+            <h2 className="text-lg font-semibold text-foreground mb-4">Estado del sistema</h2>
+            <div className="space-y-3">
+              <div className="flex justify-between items-center p-2 bg-muted/20 rounded-lg">
+                <span className="text-sm text-muted-foreground">Viscosidad</span>
                 <span className="font-semibold text-foreground">{systemData.viscosity} cSt</span>
               </div>
-              <div className="flex justify-between items-center p-3 bg-muted/20 rounded-lg">
-                <span className="text-sm text-muted-foreground">Horas de operación</span>
+              <div className="flex justify-between items-center p-2 bg-muted/20 rounded-lg">
+                <span className="text-sm text-muted-foreground">Horas op.</span>
                 <span className="font-semibold text-foreground">{Math.round(systemData.operatingHours)} h</span>
               </div>
-              <div className="flex justify-between items-center p-3 bg-muted/20 rounded-lg">
-                <span className="text-sm text-muted-foreground">Estado de filtros</span>
+              <div className="flex justify-between items-center p-2 bg-muted/20 rounded-lg">
+                <span className="text-sm text-muted-foreground">Filtros</span>
                 <span
-                  className={`font-semibold px-2 py-0.5 rounded-full border ${
+                  className={`font-semibold px-2 py-0.5 rounded-full border text-xs ${
                     systemData.filterStatus === "OK"
                       ? "bg-emerald-500/15 text-emerald-500 border-emerald-500/40"
                       : systemData.filterStatus === "REVISAR"
@@ -190,54 +193,53 @@ export const Hydraulic = () => {
                   {systemData.filterStatus}
                 </span>
               </div>
-              <div className="flex justify-between items-center p-3 bg-muted/20 rounded-lg">
-                <span className="text-sm text-muted-foreground">Próximo mantenimiento</span>
+              <div className="flex justify-between items-center p-2 bg-muted/20 rounded-lg">
+                <span className="text-sm text-muted-foreground">Mant. en</span>
                 <span className="font-semibold text-yellow-500">250 h</span>
               </div>
             </div>
           </div>
 
           {/* Temperaturas */}
-          <div className="bg-card border border-border rounded-xl p-6 xl:col-span-2">
-            <h2 className="text-xl font-semibold text-foreground mb-6">Temperaturas</h2>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 max-w-2xl">
+          <div className="bg-card border border-border rounded-xl p-4 xl:col-span-2 min-h-0">
+            <h2 className="text-lg font-semibold text-foreground mb-4">Temperaturas</h2>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 max-w-lg">
               <div className="flex flex-col items-center justify-center">
                 <Gauge
                   value={temperatures.inlet}
                   max={thresholds.tempIn.max}
-                  size={240}
-                  thickness={12}
+                  size={140}
+                  thickness={8}
                   label="Entrada"
                   units="°C"
                   level={inletTempLv}
-                  labelClassName="fill-foreground text-[11px] font-medium"
-                  valueClassName="text-sm font-semibold"
+                  labelClassName="fill-foreground text-[9px] font-medium"
+                  valueClassName="text-xs font-semibold"
                 />
               </div>
               <div className="flex flex-col items-center justify-center">
                 <Gauge
                   value={temperatures.outlet}
                   max={thresholds.tempOut.max}
-                  size={240}
-                  thickness={12}
+                  size={140}
+                  thickness={8}
                   label="Salida"
                   units="°C"
                   level={outletTempLv}
-                  labelClassName="fill-foreground text-[11px] font-medium"
-                  valueClassName="text-sm font-semibold"
+                  labelClassName="fill-foreground text-[9px] font-medium"
+                  valueClassName="text-xs font-semibold"
                 />
               </div>
             </div>
 
-            <div className="mt-6 bg-muted/20 rounded-lg p-4 inline-flex items-center gap-2">
-              <span className="text-sm text-muted-foreground">ΔT</span>
-              <span className="text-lg font-bold text-primary">+{deltaTemp} °C</span>
+            <div className="mt-3 bg-muted/20 rounded-lg p-2 inline-flex items-center gap-2">
+              <span className="text-xs text-muted-foreground">ΔT</span>
+              <span className="text-sm font-bold text-primary">+{deltaTemp} °C</span>
             </div>
           </div>
         </div>
         </div>
-      </div>
-    </div>
+        </div>
   );
 }
 
