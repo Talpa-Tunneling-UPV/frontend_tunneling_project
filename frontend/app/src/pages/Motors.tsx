@@ -310,15 +310,25 @@ export function Motors() {
 
   if (!bounds) {
     return (
-      <div className="h-full flex items-center justify-center bg-background w-full">
-        Cargando plano…
+      <div className="h-full w-full bg-background flex flex-col overflow-hidden">
+        <h1 className="text-xl lg:text-2xl font-bold text-foreground p-3 lg:p-4 pb-2 flex-shrink-0">
+          Motores
+        </h1>
+        <div className="flex-1 flex items-center justify-center">
+          Cargando plano…
+        </div>
       </div>
     );
   }
 
   return (
-    <div className="h-full w-full bg-background">
-      <MapContainer
+    <div className="h-full w-full bg-background flex flex-col overflow-hidden">
+      <h1 className="text-xl lg:text-2xl font-bold text-foreground p-3 lg:p-4 pb-2 flex-shrink-0">
+        Motores
+      </h1>
+      <div className="flex-1 overflow-hidden p-3 lg:p-4 min-h-0">
+        <div className="h-full w-full rounded-lg overflow-hidden border border-border">
+          <MapContainer
         crs={CRS.Simple}
         bounds={bounds}
         
@@ -340,7 +350,9 @@ export function Motors() {
         <ZoneClusterLayer zoneId="front"  markers={nodesByZone.front} />
         <ZoneClusterLayer zoneId="middle" markers={nodesByZone.middle} />
         <ZoneClusterLayer zoneId="rear"   markers={nodesByZone.rear} />
-      </MapContainer>
+          </MapContainer>
+        </div>
+      </div>
     </div>
   );
 }

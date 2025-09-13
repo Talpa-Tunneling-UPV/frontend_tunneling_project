@@ -16,12 +16,14 @@ const Wrapper = ({ children }: PropsWithChildren) => {
         alert("Botón de emergencia pulsado. Confirmar protocolo.");
     };
         return (
-            <div className="flex flex-col h-screen w-full bg-background">
+            <div className="flex flex-col h-screen w-full bg-background overflow-hidden">
                 <TopBar online onEmergency={handleEmergency} />
-                <div className="flex flex-row flex-1 min-h-0">
+                <div className="flex flex-row flex-1 min-h-0 overflow-hidden">
                     <SideNav />
-                    <main className="flex-1 min-h-0 overflow-auto">
-                        {children}
+                    <main className="flex-1 min-h-0 overflow-hidden">
+                        <div className="h-full w-full overflow-x-hidden overflow-y-auto">
+                            {children}
+                        </div>
                     </main>
                 </div>
             </div>

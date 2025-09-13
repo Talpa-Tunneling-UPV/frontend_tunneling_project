@@ -177,17 +177,24 @@ export const Sensors = () => {
 
 
   return (
-    <div className="bg-background w-full flex flex-col gap-4 text-foreground h-[100vh] overflow-y-scroll p-4">
-        <div className="grid grid-cols-3 gap-4">
-            <div>
+    <div className="bg-background w-full h-full flex flex-col text-foreground overflow-hidden">
+        <h1 className="text-xl lg:text-2xl font-bold text-foreground p-3 lg:p-4 pb-2 flex-shrink-0">
+          Sensores
+        </h1>
+        <div className="flex-1 overflow-hidden px-3 lg:px-4 pb-3 lg:pb-4 min-h-0 flex flex-col gap-3">
+          {/* Header section - fixed height */}
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-3 flex-shrink-0">
+            <div className="lg:col-span-1">
                 <StatusSensors data={data} />
             </div>
-            <div className="col-span-2">
+            <div className="lg:col-span-2">
                 <SensorsAlertsList data={data} />
             </div>
         </div>
-        <div>
-          <SensorsList data={data} />
+        {/* Main content - flexible height */}
+          <div className="flex-1 min-h-0 overflow-hidden">
+            <SensorsList data={data} />
+          </div>
         </div>
     </div>
   )
