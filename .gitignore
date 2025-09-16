@@ -27,6 +27,7 @@ frontend/app/node_modules/
 
 # Mobile Tools for Java (J2ME)
 .mtj.tmp/
+package-lock-json
 
 # Package Files #
 *.jar
