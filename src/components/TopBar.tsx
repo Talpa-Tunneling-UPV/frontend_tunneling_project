@@ -11,13 +11,16 @@ export const TopBar: React.FC<Props> = ({ online = true, onEmergency }) => {
   <header className="h-14 w-full bg-card border-b border-border flex items-center justify-between px-4 sm:px-6">
       {/* Left: Logo */}
       <div className="flex items-center gap-3">
-  <img src={logo} alt="Talpa" className="h-4 w-auto" />
+  <img src={logo} alt="Talpa" className="w-48 h-auto max-w-48" />
       </div>
 
       {/* Right: Status + Emergency */}
       <div className="flex items-center gap-3">
         <span
-          className="inline-flex items-center gap-2 rounded-full border px-2.5 py-1 text-xs font-medium"
+          className={[
+            "inline-flex items-center gap-2 rounded-full px-2.5 py-1 text-xs font-medium",
+            online ? "border border-emerald-500/40" : "border border-red-500/40"
+          ].join(" ")}
           aria-live="polite"
         >
           <span
@@ -35,10 +38,10 @@ export const TopBar: React.FC<Props> = ({ online = true, onEmergency }) => {
         <button
           type="button"
           onClick={onEmergency}
-          className="inline-flex items-center gap-2 rounded-md bg-red-600 px-3 py-1.5 text-sm font-semibold text-white shadow-sm hover:bg-red-700 focus-visible:outline-none focus-visible:ring-2 ring-offset-2 ring-red-600/70 ring-offset-card/40"
+          className="inline-flex items-center gap-2 rounded-full bg-red-600 px-3 py-1.5 text-sm font-semibold text-white shadow-sm hover:bg-red-700 focus-visible:outline-none focus-visible:ring-2 ring-offset-2 ring-red-600/70 ring-offset-card/40"
         >
           {/* <span className="inline-block h-2 w-2 rounded-full bg-white" /> */}
-          Emergencia
+          SOS
         </button>
       </div>
     </header>

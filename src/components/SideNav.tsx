@@ -92,9 +92,10 @@ export const SideNav = () => {
 
             <div
                 className={[
-                    "relative flex h-full text-sidebar-foreground flex-col bg-sidebar bg-clip-border shadow-xl transition-all duration-300 ease-in-out z-50",
+                    "relative flex h-full text-sidebar-foreground flex-col bg-sidebar bg-clip-border shadow-xl sidebar-width-transition z-50",
                     isCollapsed ? "w-16 overflow-hidden" : "w-full max-w-[16rem] overflow-hidden",
-                    isMobile && !isCollapsed ? "fixed left-0 top-0 h-screen" : ""
+                    isMobile && !isCollapsed ? "fixed left-0 top-0 h-screen" : "",
+                    "transition-all duration-500 ease-out"
                 ].join(" ")}
             >
                 {/* Toggle Button */}
@@ -103,19 +104,23 @@ export const SideNav = () => {
                     <button
                         onClick={toggleCollapse}
                         className={[
-                            "flex items-center justify-center h-8 w-8 rounded-md transition-colors outline-none",
-                            "hover:bg-sidebar-accent hover:text-sidebar-accent-foreground",
+                            "flex items-center justify-center h-8 w-8 rounded-md outline-none",
+                            "transition-all duration-500 cubic-bezier(0.23, 1, 0.32, 1)",
+                            "hover:bg-sidebar-accent hover:text-sidebar-accent-foreground hover:scale-110",
                             "focus-visible:ring-2 ring-offset-2 ring-sidebar-ring/70 ring-offset-sidebar/40",
+                            "active:scale-90",
                             isCollapsed ? "mx-auto" : "ml-auto"
                         ].join(" ")}
                         title={isCollapsed ? "Expandir menú" : "Colapsar menú"}
                     >
-                        {isCollapsed ? <MdMenuOpen size={18} /> : <MdMenu size={18} />}
+                        <span className="transition-all duration-500 cubic-bezier(0.23, 1, 0.32, 1) transform">
+                            {isCollapsed ? <MdMenuOpen size={18} /> : <MdMenu size={18} />}
+                        </span>
                     </button>
                 </div>
 
                 <nav className={[
-                    "flex flex-col gap-1 p-2 font-sans text-base font-normal text-blue-gray-700 overflow-y-auto overflow-x-hidden",
+                    "flex flex-col gap-1 p-2 font-sans text-base font-normal text-blue-gray-700 overflow-y-auto overflow-x-hidden sidebar-nav-transition",
                     isCollapsed ? "px-1" : "px-2"
                 ].join(" ")}>
                     {
@@ -125,8 +130,10 @@ export const SideNav = () => {
                                 to={element.url}
                                 className={({ isActive }) =>
                                     [
-                                        "sidebar-item group relative flex items-center w-full rounded-lg transition-all duration-200 outline-none",
+                                        "sidebar-item group relative flex items-center w-full rounded-lg outline-none",
+                                        "transition-all duration-500 cubic-bezier(0.23, 1, 0.32, 1)",
                                         "focus-visible:ring-2 ring-offset-2 ring-sidebar-ring/70 ring-offset-sidebar/40",
+                                        "hover:scale-[1.03] active:scale-[0.97]",
                                         isActive
                                             ? "bg-primary/10 text-sidebar-foreground hover:bg-primary/15"
                                             : "hover:bg-sidebar-accent hover:text-sidebar-accent-foreground",
@@ -146,23 +153,30 @@ export const SideNav = () => {
                                         {!isCollapsed && (
                                             <span
                                                 className={[
-                                                    "absolute left-1 top-1/2 -translate-y-1/2 h-6 w-1 rounded-full transition-all",
-                                                    isActive ? "bg-primary opacity-100" : "bg-primary/50 opacity-0 group-hover:opacity-60",
+                                                    "absolute left-1 top-1/2 -translate-y-1/2 h-6 w-1 rounded-full",
+                                                    "transition-all duration-500 cubic-bezier(0.23, 1, 0.32, 1)",
+                                                    isActive 
+                                                        ? "bg-primary opacity-100 scale-100" 
+                                                        : "bg-primary/50 opacity-0 scale-75 group-hover:opacity-60 group-hover:scale-90",
                                                 ].join(" ")}
                                             />
                                         )}
                                         {/* Icon */}
                                         <span
                                             className={[
-                                                "grid place-items-center h-8 w-8 rounded-md transition-colors flex-shrink-0",
+                                                "grid place-items-center h-8 w-8 rounded-md flex-shrink-0",
+                                                "transition-all duration-500 cubic-bezier(0.23, 1, 0.32, 1)",
+                                                "group-hover:scale-110",
                                                 isActive ? "bg-primary text-primary-foreground" : "bg-sidebar-accent/50 text-sidebar-foreground",
                                             ].join(" ")}
                                         >
-                                            <element.icon size={18} />
+                                            <span className="transition-all duration-500 cubic-bezier(0.23, 1, 0.32, 1) group-hover:rotate-6">
+                                                <element.icon size={18} />
+                                            </span>
                                         </span>
                                         {/* Label - solo visible cuando no está colapsado */}
                                         {!isCollapsed && (
-                                            <span className="truncate text-[0.95rem] leading-none transition-opacity duration-200">
+                                            <span className="truncate text-[0.95rem] leading-none sidebar-content-transition">
                                                 {element.title}
                                             </span>
                                         )}
@@ -180,8 +194,8 @@ export const SideNav = () => {
 
                 {/* Footer - solo visible cuando no está colapsado */}
                 {!isCollapsed && (
-                    <footer className="mt-auto pt-3 px-3 text-xs text-muted-foreground/80 transition-opacity duration-200">
-                        <div className="border-t border-sidebar-border/60 pt-3">
+                    <footer className="mt-auto pt-3 px-3 text-xs text-muted-foreground/80 sidebar-content-transition">
+                        <div className="border-t border-sidebar-border/60 pt-3 transition-all duration-300 ease-out">
                             <span>v1.0 • © UPV</span>
                         </div>
                     </footer>

@@ -1,5 +1,5 @@
 import { createBrowserRouter } from "react-router"
-import { Home } from "../pages/Home"
+import Home from "../pages/Home"
 import type { PropsWithChildren } from "react"
 import { SideNav } from "../components/SideNav"
 import TopBar from "../components/TopBar"
@@ -21,7 +21,7 @@ const Wrapper = ({ children }: PropsWithChildren) => {
                 <div className="flex flex-row flex-1 min-h-0 overflow-hidden">
                     <SideNav />
                     <main className="flex-1 min-h-0 overflow-hidden">
-                        <div className="h-full w-full overflow-x-hidden overflow-y-auto">
+                        <div className="h-full w-full overflow-hidden">
                             {children}
                         </div>
                     </main>
