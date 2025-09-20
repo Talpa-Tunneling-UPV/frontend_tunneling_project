@@ -200,7 +200,7 @@ const UnifiedAlertsAndEvents = ({ sensors, events }: Props) => {
       </div>
 
       {/* Lista de elementos - con scroll mejorado */}
-      <div className="flex-1 overflow-y-auto min-h-0 alerts-scroll-container">
+      <div className="flex-1 overflow-y-auto min-h-0 alerts-scroll-container dashboard-variant">
         {filteredItems.length === 0 ? (
           <div className="p-6 text-center text-muted-foreground">
             <MdFilterList className="h-8 w-8 mx-auto mb-2 opacity-50" />

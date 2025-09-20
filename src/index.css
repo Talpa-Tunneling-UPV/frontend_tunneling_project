@@ -471,9 +471,13 @@ img {
 .alerts-scroll-container {
   scrollbar-width: thin;
   scrollbar-color: #ffffff rgba(0, 51, 141, 0.1);
-  height: 100% !important;
+  height: 100%;
+  overflow-y: auto;
+}
+
+/* Variante específica para el dashboard con altura mínima fija */
+.alerts-scroll-container.dashboard-variant {
   min-height: 400px !important;
-  overflow-y: auto !important;
 }
 
 .alerts-scroll-container::-webkit-scrollbar {

@@ -28,6 +28,20 @@ const getStatusColor = (
   }
 };
 
+// Función para obtener el texto traducido del estado
+const getStatusText = (status: "online" | "advertencia" | "error" | "offline") => {
+  switch (status) {
+    case "advertencia":
+      return "Advertencia";
+    case "error":
+      return "Error";
+    case "online":
+      return "En línea";
+    case "offline":
+      return "Sin conexión";
+  }
+};
+
 const getIcon = (type: sensorsTypes) => {
   switch (type) {
     case "presion":
@@ -82,91 +96,156 @@ const tabs: tabInterface[] = [
 
 
 export const SensorsList = ({data}: {data: sensorInterface[]}) => {
-  const [activeTab, setActiveTab] = useState<sensorsTypes>("todos");
+  const [activeFilters, setActiveFilters] = useState<Set<sensorsTypes>>(new Set(["todos"]));
   const [isModalOpen, setIsModalOpen] = useState(false);
   const selectedSensor = useRef<null | sensorInterface>(null)
+  
   const handleOnOpenModal = (sensor: sensorInterface) => {
     selectedSensor.current = sensor;
     setIsModalOpen(true);
   }
+  
+  const toggleFilter = (filterType: sensorsTypes) => {
+    const newFilters = new Set(activeFilters);
+    
+    if (filterType === "todos") {
+      // Si seleccionamos "todos", limpiamos todos los demás filtros
+      setActiveFilters(new Set(["todos"]));
+    } else {
+      // Removemos "todos" si existe
+      newFilters.delete("todos");
+      
+      if (newFilters.has(filterType)) {
+        newFilters.delete(filterType);
+        // Si no quedan filtros, activamos "todos"
+        if (newFilters.size === 0) {
+          newFilters.add("todos");
+        }
+      } else {
+        newFilters.add(filterType);
+      }
+      
+      setActiveFilters(newFilters);
+    }
+  };
+  
+  const clearAllFilters = () => {
+    setActiveFilters(new Set(["todos"]));
+  };
+  
   const getFilteredSensors = () => {
-    if (activeTab === "todos") {
+    if (activeFilters.has("todos")) {
       return data;
     }
-    return data.filter(sensor => sensor.type == activeTab)
+    return data.filter(sensor => activeFilters.has(sensor.type));
   };
 
   return (
-    <div className="flex flex-1 flex-col space-y-6">
-      <div className="border-b border-border">
-        <nav className="flex space-x-8 overflow-x-auto">
-          {tabs.map((tab) => (
-            <button
-              key={tab.title}
-              onClick={() => setActiveTab(tab.type)}
-              className={`whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm transition-colors ${
-                activeTab === tab.type
-                  ? "border-primary text-primary"
-                  : "border-transparent text-muted-foreground hover:text-foreground hover:border-muted-foreground"
-              }`}
-            >
-              <div className="flex justify-center items-center">
-                <div className="flex gap-1 justify-center items-center">
+    <div className="flex flex-col h-full space-y-4 bg-card border border-accent rounded-xl p-4">
+      {/* Header con título y botón limpiar filtros */}
+      <div className="flex justify-between items-center flex-shrink-0">
+        <h2 className="text-xl font-semibold text-foreground">Lista de Sensores</h2>
+        {!activeFilters.has("todos") && activeFilters.size > 0 && (
+          <button
+            onClick={clearAllFilters}
+            className="px-3 py-1 text-xs font-medium bg-red-100 text-red-700 rounded-md hover:bg-red-200 transition-colors dark:bg-red-900/20 dark:text-red-300 dark:hover:bg-red-900/30"
+          >
+            Limpiar filtros
+          </button>
+        )}
+      </div>
+      
+      {/* Filtros */}
+      <div className="border-b border-border pb-4 flex-shrink-0">
+        <div className="flex flex-wrap gap-2">
+          {tabs.map((tab) => {
+            const isActive = activeFilters.has(tab.type);
+            const count = tab.type === "todos" ? data.length : data.filter(sensor => sensor.type === tab.type).length;
+            
+            return (
+              <button
+                key={tab.title}
+                onClick={() => toggleFilter(tab.type)}
+                className={`flex items-center gap-2 px-3 py-2 rounded-lg border font-medium text-sm transition-colors ${
+                  isActive
+                    ? "bg-primary text-primary-foreground border-primary"
+                    : "bg-background text-muted-foreground border-border hover:text-foreground hover:border-muted-foreground hover:bg-muted/50"
+                }`}
+              >
+                <div className="flex items-center gap-1">
                   {getIcon(tab.type)}
                   {tab.title}
                 </div>
-                <span className="ml-1 px-2 py-1 text-xs rounded-full bg-muted text-muted-foreground">
-                  {tab.type === "todos" ? data.length : data.filter(sensor => sensor.type === tab.type).length}
+                <span className={`px-2 py-0.5 text-xs rounded-full flex items-center justify-center ${
+                  isActive 
+                    ? "bg-primary-foreground/20 text-primary-foreground" 
+                    : "bg-muted text-muted-foreground"
+                }`}>
+                  {count}
                 </span>
-              </div>
-            </button>
-          ))}
-        </nav>
+              </button>
+            );
+          })}
+        </div>
       </div>
 
-      <div className="grid max-h-[52vh] overflow-auto gap-4">
-        {getFilteredSensors().map((sensor) => (
-          <div key={sensor.title} className="bg-card border border-border rounded-lg p-6 hover:bg-accent/50 transition-colors">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center space-x-4">
-                <div className="flex-shrink-0">
-                  <div className="w-10 h-10 bg-primary/10 rounded-lg flex items-center justify-center">
-                    {getIcon(sensor.type)}
+      {/* Lista de sensores */}
+      <div className="flex-1 min-h-0 alerts-scroll-container">
+        <div className="space-y-3 p-2">
+          {getFilteredSensors().length === 0 ? (
+            <div className="text-center py-8 text-muted-foreground">
+              No hay sensores que coincidan con los filtros seleccionados
+            </div>
+          ) : (
+            getFilteredSensors().map((sensor) => (
+              <div key={sensor.title} className="bg-background border border-border rounded-lg p-4 hover:bg-muted/30 transition-colors">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center space-x-4">
+                    <div className="flex-shrink-0">
+                      <div className="w-10 h-10 bg-primary/10 rounded-lg flex items-center justify-center text-primary">
+                        {getIcon(sensor.type)}
+                      </div>
+                    </div>
+                    <div>
+                      <h3 className="font-semibold text-foreground">
+                        {sensor.title}
+                      </h3>
+                      <p className="text-sm text-muted-foreground capitalize">
+                        {sensor.type}
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="flex items-center space-x-6">
+                    <div className="text-right">
+                      <p className="text-sm font-medium text-muted-foreground">
+                        Valor
+                      </p>
+                      <p className="font-bold text-lg text-foreground">
+                        {sensor.value + sensor.units}
+                      </p>
+                    </div>
+                    <div className="flex items-center space-x-3">
+                      <span
+                        className={`px-3 py-1 rounded-full text-xs font-medium flex items-center justify-center ${getStatusColor(
+                          sensor.status
+                        )}`}
+                      >
+                        {getStatusText(sensor.status)}
+                      </span>
+                      <button
+                        onClick={() => handleOnOpenModal(sensor)}
+                        className="px-4 py-2 text-sm font-medium bg-muted text-foreground border border-border hover:bg-muted/80 rounded-md transition-colors"
+                      >
+                        Detalles
+                      </button>
+                    </div>
                   </div>
                 </div>
-                <h3 className="font-semibold text-foreground">
-                  {sensor.title}
-                </h3>
               </div>
-
-              <div className="flex items-center space-x-6">
-                <div className="text-center">
-                  <p className="text-sm font-medium text-foreground">
-                    Valor:{" "}
-                    <span className="font-bold text-lg">
-                      {sensor.value + sensor.units}
-                    </span>
-                  </p>
-                </div>
-                <div className="flex items-center space-x-3">
-                  <span
-                    className={`px-3 py-1 rounded-full text-xs font-medium ${getStatusColor(
-                      sensor.status
-                    )}`}
-                  >
-                    {sensor.status}
-                  </span>
-                  <button
-                    onClick={() => handleOnOpenModal(sensor)}
-                    className="px-4 py-2 text-sm font-medium text-foreground bg-muted hover:bg-muted/80 rounded-md transition-colors"
-                  >
-                    Detalles
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div>
-        ))}
+            ))
+          )}
+        </div>
       </div>
       {
         isModalOpen && createPortal(<ModalSensor sensor={selectedSensor.current} setOpen={setIsModalOpen} />, document.body)

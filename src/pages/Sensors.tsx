@@ -162,6 +162,91 @@ const data: sensorInterface[] = [
     status: "offline",
     type: "gas"
   },
+  // Sensores adicionales para probar scroll
+  {
+    title: "Presión hidráulica secundaria",
+    value: 165,
+    units: "bar",
+    status: "online",
+    type: "presion"
+  },
+  {
+    title: "Temperatura bomba principal",
+    value: 65,
+    units: "°C",
+    status: "online",
+    type: "temperatura"
+  },
+  {
+    title: "Posición vertical cabeza",
+    value: 12.3,
+    units: "m",
+    status: "advertencia",
+    type: "posicion"
+  },
+  {
+    title: "Velocidad rotación secundaria",
+    value: 3,
+    units: "rpm",
+    status: "online",
+    type: "rotacion"
+  },
+  {
+    title: "Caudal bentonita",
+    value: 85,
+    units: "l/min",
+    status: "advertencia",
+    type: "caudal"
+  },
+  {
+    title: "Detector de H2S",
+    value: 5,
+    units: "ppm",
+    status: "online",
+    type: "gas"
+  },
+  {
+    title: "Presión sistema auxiliar",
+    value: 95,
+    units: "bar",
+    status: "online",
+    type: "presion"
+  },
+  {
+    title: "Temperatura refrigerante",
+    value: 45,
+    units: "°C",
+    status: "online",
+    type: "temperatura"
+  },
+  {
+    title: "Posición horizontal precisa",
+    value: -2.1,
+    units: "mm",
+    status: "online",
+    type: "posicion"
+  },
+  {
+    title: "Par motor auxiliar",
+    value: 35,
+    units: "%",
+    status: "online",
+    type: "rotacion"
+  },
+  {
+    title: "Caudal agua refrigeración",
+    value: 45,
+    units: "l/min",
+    status: "online",
+    type: "caudal"
+  },
+  {
+    title: "Detector de CO2",
+    value: 400,
+    units: "ppm",
+    status: "online",
+    type: "gas"
+  }
 ]
 
 
@@ -181,17 +266,20 @@ export const Sensors = () => {
         <h1 className="text-xl lg:text-2xl font-bold text-foreground p-3 lg:p-4 pb-2 flex-shrink-0">
           Sensores
         </h1>
-        <div className="flex-1 overflow-hidden px-3 lg:px-4 pb-3 lg:pb-4 min-h-0 flex flex-col gap-3">
-          {/* Header section - fixed height */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-3 flex-shrink-0">
-            <div className="lg:col-span-1">
-                <StatusSensors data={data} />
+        <div className="flex-1 overflow-hidden px-3 lg:px-4 pb-3 lg:pb-4 min-h-0 flex gap-3">
+          {/* Left column - Status sensors and alerts below (1/3 of screen for alerts) */}
+          <div className="flex flex-col gap-3 w-1/3 min-h-0">
+            {/* Status sensors - top part */}
+            <div className="flex-shrink-0">
+              <StatusSensors data={data} />
             </div>
-            <div className="lg:col-span-2">
-                <SensorsAlertsList data={data} />
+            {/* Alerts - bottom part (1/3 of total screen height) */}
+            <div className="flex-1 min-h-0 overflow-hidden">
+              <SensorsAlertsList data={data} />
             </div>
-        </div>
-        {/* Main content - flexible height */}
+          </div>
+          
+          {/* Right column - Main sensors list with filters (2/3) */}
           <div className="flex-1 min-h-0 overflow-hidden">
             <SensorsList data={data} />
           </div>
