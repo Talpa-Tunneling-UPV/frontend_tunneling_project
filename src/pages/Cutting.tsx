@@ -56,6 +56,9 @@ export const Cutting = () => {
   // Giro más lento: factor de desaceleración + periodo mínimo
   const spinPeriodSec = useSpinPeriod(cuttingData.rpm, cuttingData.isRunning && spinEnabled, 4, 8);
 
+  // Cambio de direccion de giro
+  const [reversed, setReversed] = React.useState(false);
+
   return (
     <div className="h-full w-full flex flex-col bg-background overflow-hidden">
       <h1 className="text-xl lg:text-2xl font-bold text-foreground p-3 lg:p-4 pb-2 flex-shrink-0">
@@ -66,6 +69,27 @@ export const Cutting = () => {
         {/* Left Card: imagen con animación y toggle de UI */}
         <div className="bg-card border border-border rounded-xl p-6 flex items-center justify-center">
           <div className="text-center space-y-3">
+            <div>
+              <button
+                type="button"
+                className="bg-primary p-4 rounded-xl mr-5 text-white font-medium shadow-md 
+                   hover:bg-primary/80 active:bg-gray-300 focus:ring-2 focus:ring-offset-2 
+                   focus:ring-primary transition-all duration-200"
+                onClick={() => setReversed(true)}
+                >
+                Left
+              </button>
+
+              <button
+                type="button"
+                className="bg-primary p-4 rounded-xl text-white font-medium shadow-md 
+                 hover:bg-primary/80 active:bg-gray-300 focus:ring-2 focus:ring-offset-2 
+                 focus:ring-primary transition-all duration-200"
+                onClick={() => setReversed(false)}
+                  >
+                Right
+            </button>
+            </div>
             <div className="flex items-center justify-between gap-3 mb-2">
               <h3 className="text-lg font-semibold text-foreground">Corona de Corte</h3>
               {/* Toggle para activar/desactivar solo la animación visual */}
@@ -97,7 +121,7 @@ export const Cutting = () => {
                 className={`w-full h-full ${spinEnabled && cuttingData.isRunning ? "animate-spin" : ""}`}
                 style={
                   spinEnabled && cuttingData.isRunning
-                    ? { animationDuration: `${spinPeriodSec}s`, animationTimingFunction: "linear", willChange: "transform" }
+                    ? { animationDuration: `${spinPeriodSec}s`, animationTimingFunction: "linear", willChange: "transform", animationDirection: reversed ? "reverse" : "normal", }
                     : undefined
                 }
               />
