@@ -72,7 +72,7 @@ export const Cutting = () => {
             <div>
               <button
                 type="button"
-                className="bg-primary p-4 rounded-xl mr-5 text-white font-medium shadow-md 
+                className="w-32 bg-primary p-4 rounded-xl mr-5 text-black font-medium shadow-md 
                    hover:bg-primary/80 active:bg-gray-300 focus:ring-2 focus:ring-offset-2 
                    focus:ring-primary transition-all duration-200"
                 onClick={() => setReversed(true)}
@@ -82,7 +82,7 @@ export const Cutting = () => {
 
               <button
                 type="button"
-                className="bg-primary p-4 rounded-xl text-white font-medium shadow-md 
+                className="w-32 bg-primary p-4 rounded-xl text-black font-medium shadow-md 
                  hover:bg-primary/80 active:bg-gray-300 focus:ring-2 focus:ring-offset-2 
                  focus:ring-primary transition-all duration-200"
                 onClick={() => setReversed(false)}
