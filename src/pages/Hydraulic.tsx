@@ -94,152 +94,191 @@ export const Hydraulic = () => {
   const deltaTemp = useMemo(() => (temperatures.outlet - temperatures.inlet).toFixed(1), [temperatures]);
 
   return (
-
-      <div className="h-full w-full flex flex-col bg-background overflow-hidden">
-
-        <h1 className="text-xl lg:text-2xl font-bold text-foreground p-3 lg:p-4 pb-2 flex-shrink-0">
-          Sistema Hidráulico
-        </h1>
-        <div className="flex-1 overflow-y-auto overflow-x-hidden px-3 lg:px-4 pb-4 min-h-0">
-        <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-3 lg:gap-4">
-          {/* Presiones del sistema */}
-          <div className="bg-card border border-border rounded-xl p-4 xl:col-span-2 min-h-0">
-            <div className="flex items-center justify-between mb-4">
-              <h2 className="text-lg font-semibold text-foreground">Presiones del sistema</h2>
-              <span className={`text-xs font-semibold px-2 py-1 rounded-full border ${levelChipCls(mainPressureLv)}`}>
-                Principal: {pressureData.main.toFixed(1)} bar
-              </span>
-            </div>
-
-            {/* Gauges de presión - más compactos */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-3">
-              <div className="flex flex-col items-center justify-center">
-                <Gauge
-                  value={pressureData.main}
-                  max={PRESSURE_MAX_MAIN}
-                  size={160}
-                  thickness={10}
-                  label="Presión principal"
-                  units="bar"
-                  level={mainPressureLv}
-                  labelClassName="fill-foreground text-[8px] font-medium"
-                  valueClassName="text-xs font-semibold"
-                />
-              </div>
-              <div className="flex flex-col items-center justify-center">
-                <Gauge
-                  value={pressureData.return}
-                  max={PRESSURE_MAX_RETURN}
-                  size={160}
-                  thickness={10}
-                  label="Presión de retorno"
-                  units="bar"
-                  level={returnPressureLv}
-                  labelClassName="fill-foreground text-[8px] font-medium"
-                  valueClassName="text-xs font-semibold"
-                />
-              </div>
-            </div>
-
-            {/* KPIs de presión - más compactos */}
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
-              <div className="text-center p-2 bg-muted/20 border border-border/60 rounded-lg">
-                <div className="text-sm font-bold text-foreground">{deltaPressure}</div>
-                <div className="text-xs text-muted-foreground">Dif. presión</div>
-              </div>
-              <div className="text-center p-2 bg-muted/20 border border-border/60 rounded-lg">
-                <div className="text-sm font-bold text-foreground">
+    <div className="h-full w-full flex flex-col bg-background overflow-hidden">
+      <h1 className="text-xl lg:text-2xl font-bold text-foreground p-3 lg:p-4 pb-2 flex-shrink-0">
+        Sistema Hidráulico
+      </h1>
+      
+      <div className="flex-1 overflow-y-auto overflow-x-hidden px-3 lg:px-4 pb-4 min-h-0">
+        {/* Layout principal en 2 columnas */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+          {/* Columna izquierda - Presiones y Temperaturas */}
+          <div className="space-y-4">
+            {/* Métricas clave */}
+            <div className="grid grid-cols-4 gap-3">
+              <div className="bg-card border border-border rounded-xl p-4 text-center">
+                <div className="text-sm font-semibold text-foreground mb-2">Presión Principal</div>
+                <div className={`text-3xl font-bold ${levelTextCls(mainPressureLv)}`}>
+                  {pressureData.main.toFixed(1)}
+                </div>
+                <div className="text-xs text-muted-foreground mb-3">bar</div>
+                <div className="text-xs text-muted-foreground mb-1">Carga</div>
+                <div className={`text-lg font-bold ${levelTextCls(mainPressureLv)}`}>
                   {Math.round((pressureData.main / PRESSURE_MAX_MAIN) * 100)}%
                 </div>
-                <div className="text-xs text-muted-foreground">% carga</div>
               </div>
-              <div className="text-center p-2 bg-muted/20 border border-border/60 rounded-lg">
-                <div className="text-sm font-bold text-primary">{systemData.flowRate.toFixed(1)}</div>
-                <div className="text-xs text-muted-foreground">Flujo L/min</div>
+
+              <div className="bg-card border border-border rounded-xl p-4 text-center">
+                <div className="text-sm font-semibold text-foreground mb-2">Temperatura Salida</div>
+                <div className={`text-3xl font-bold ${levelTextCls(outletTempLv)}`}>
+                  {temperatures.outlet.toFixed(1)}
+                </div>
+                <div className="text-xs text-muted-foreground mb-3">°C</div>
+                <div className="text-xs text-muted-foreground mb-1">Delta T</div>
+                <div className="text-lg font-bold text-primary">
+                  +{deltaTemp}°C
+                </div>
               </div>
-              <div className="text-center p-2 bg-muted/20 border border-border/60 rounded-lg">
-                <div className={`text-sm font-bold ${levelTextCls(efficiencyLv)}`}>{systemData.efficiency.toFixed(2)}%</div>
-                <div className="text-xs text-muted-foreground">Eficiencia</div>
+
+              <div className="bg-card border border-border rounded-xl p-4 text-center">
+                <div className="text-sm font-semibold text-foreground mb-2">Eficiencia</div>
+                <div className={`text-3xl font-bold ${levelTextCls(efficiencyLv)}`}>
+                  {systemData.efficiency.toFixed(1)}
+                </div>
+                <div className="text-xs text-muted-foreground mb-3">%</div>
+                <div className="text-xs text-muted-foreground mb-1">Estado</div>
+                <div className={`text-lg font-bold ${levelTextCls(efficiencyLv)}`}>
+                  {efficiencyLv === "ok" ? "Óptima" : efficiencyLv === "warn" ? "Vigilar" : "Crítica"}
+                </div>
+              </div>
+
+              <div className="bg-card border border-border rounded-xl p-4 text-center">
+                <div className="text-sm font-semibold text-foreground mb-2">Flujo</div>
+                <div className="text-3xl font-bold text-primary">
+                  {systemData.flowRate.toFixed(1)}
+                </div>
+                <div className="text-xs text-muted-foreground mb-3">L/min</div>
+                <div className="text-xs text-muted-foreground mb-1">Delta P</div>
+                <div className="text-lg font-bold text-foreground">
+                  {deltaPressure} bar
+                </div>
+              </div>
+            </div>
+
+            {/* Gauges de presión */}
+            <div className="bg-card border border-border rounded-xl p-5">
+              <h2 className="text-lg font-semibold text-foreground mb-4">Presiones</h2>
+              <div className="grid grid-cols-2 gap-4">
+                <div className="flex flex-col items-center">
+                  <Gauge
+                    value={pressureData.main}
+                    max={PRESSURE_MAX_MAIN}
+                    size={180}
+                    thickness={12}
+                    label="Principal"
+                    units="bar"
+                    level={mainPressureLv}
+                    labelClassName="fill-foreground text-[10px] font-medium"
+                    valueClassName="text-sm font-bold"
+                  />
+                </div>
+                <div className="flex flex-col items-center">
+                  <Gauge
+                    value={pressureData.return}
+                    max={PRESSURE_MAX_RETURN}
+                    size={180}
+                    thickness={12}
+                    label="Retorno"
+                    units="bar"
+                    level={returnPressureLv}
+                    labelClassName="fill-foreground text-[10px] font-medium"
+                    valueClassName="text-sm font-bold"
+                  />
+                </div>
+              </div>
+            </div>
+
+            {/* Temperaturas */}
+            <div className="bg-card border border-border rounded-xl p-5">
+              <h2 className="text-lg font-semibold text-foreground mb-4">Temperaturas</h2>
+              <div className="grid grid-cols-2 gap-4">
+                <div className="flex flex-col items-center">
+                  <Gauge
+                    value={temperatures.inlet}
+                    max={thresholds.tempIn.max}
+                    size={160}
+                    thickness={10}
+                    label="Entrada"
+                    units="°C"
+                    level={inletTempLv}
+                    labelClassName="fill-foreground text-[10px] font-medium"
+                    valueClassName="text-sm font-bold"
+                  />
+                </div>
+                <div className="flex flex-col items-center">
+                  <Gauge
+                    value={temperatures.outlet}
+                    max={thresholds.tempOut.max}
+                    size={160}
+                    thickness={10}
+                    label="Salida"
+                    units="°C"
+                    level={outletTempLv}
+                    labelClassName="fill-foreground text-[10px] font-medium"
+                    valueClassName="text-sm font-bold"
+                  />
+                </div>
               </div>
             </div>
           </div>
 
-          {/* Niveles de aceite */}
-          <OilLevelsList oilTanks={oilLevels} />
+          {/* Columna derecha - Niveles y Estado */}
+          <div className="space-y-4">
+            {/* Niveles de aceite */}
+            <OilLevelsList oilTanks={oilLevels} />
 
-          {/* Estado del sistema */}
-          <div className="bg-card border border-border rounded-xl p-4 min-h-0">
-            <h2 className="text-lg font-semibold text-foreground mb-4">Estado del sistema</h2>
-            <div className="space-y-3">
-              <div className="flex justify-between items-center p-2 bg-muted/20 rounded-lg">
-                <span className="text-sm text-muted-foreground">Viscosidad</span>
-                <span className="font-semibold text-foreground">{systemData.viscosity} cSt</span>
-              </div>
-              <div className="flex justify-between items-center p-2 bg-muted/20 rounded-lg">
-                <span className="text-sm text-muted-foreground">Horas op.</span>
-                <span className="font-semibold text-foreground">{Math.round(systemData.operatingHours)} h</span>
-              </div>
-              <div className="flex justify-between items-center p-2 bg-muted/20 rounded-lg">
-                <span className="text-sm text-muted-foreground">Filtros</span>
-                <span
-                  className={`font-semibold px-2 py-0.5 rounded-full border text-xs ${
+            {/* Estado del sistema */}
+            <div className="bg-card border border-border rounded-xl p-5">
+              <h2 className="text-lg font-semibold text-foreground mb-4">Estado del Sistema</h2>
+              <div className="space-y-3">
+                <div className="flex justify-between items-center p-3 bg-muted/20 rounded-lg border border-border/50">
+                  <div className="flex items-center gap-2">
+                    <div className="w-2 h-2 rounded-full bg-primary"></div>
+                    <span className="text-sm font-medium text-foreground">Viscosidad</span>
+                  </div>
+                  <span className="font-bold text-foreground">{systemData.viscosity} <span className="text-xs text-muted-foreground">cSt</span></span>
+                </div>
+                
+                <div className="flex justify-between items-center p-3 bg-muted/20 rounded-lg border border-border/50">
+                  <div className="flex items-center gap-2">
+                    <div className="w-2 h-2 rounded-full bg-primary"></div>
+                    <span className="text-sm font-medium text-foreground">Horas operación</span>
+                  </div>
+                  <span className="font-bold text-foreground">{Math.round(systemData.operatingHours)} <span className="text-xs text-muted-foreground">h</span></span>
+                </div>
+                
+                <div className="flex justify-between items-center p-3 bg-muted/20 rounded-lg border border-border/50">
+                  <div className="flex items-center gap-2">
+                    <div className={`w-2 h-2 rounded-full ${
+                      systemData.filterStatus === "OK" ? "bg-emerald-500" :
+                      systemData.filterStatus === "REVISAR" ? "bg-amber-500" : "bg-red-500"
+                    }`}></div>
+                    <span className="text-sm font-medium text-foreground">Estado filtros</span>
+                  </div>
+                  <span className={`font-bold px-3 py-1 rounded-full text-sm ${
                     systemData.filterStatus === "OK"
-                      ? "bg-emerald-500/15 text-emerald-500 border-emerald-500/40"
+                      ? "bg-emerald-500/15 text-emerald-500 border border-emerald-500/40"
                       : systemData.filterStatus === "REVISAR"
-                      ? "bg-amber-500/15 text-amber-500 border-amber-500/40"
-                      : "bg-red-500/15 text-red-500 border-red-500/40"
-                  }`}
-                >
-                  {systemData.filterStatus}
-                </span>
-              </div>
-              <div className="flex justify-between items-center p-2 bg-muted/20 rounded-lg">
-                <span className="text-sm text-muted-foreground">Mant. en</span>
-                <span className="font-semibold text-yellow-500">250 h</span>
+                      ? "bg-amber-500/15 text-amber-500 border border-amber-500/40"
+                      : "bg-red-500/15 text-red-500 border border-red-500/40"
+                  }`}>
+                    {systemData.filterStatus}
+                  </span>
+                </div>
+                
+                <div className="flex justify-between items-center p-3 bg-amber-500/10 rounded-lg border border-amber-500/30">
+                  <div className="flex items-center gap-2">
+                    <div className="w-2 h-2 rounded-full bg-amber-500"></div>
+                    <span className="text-sm font-medium text-foreground">Mantenimiento en</span>
+                  </div>
+                  <span className="font-bold text-amber-600 dark:text-amber-500">250 <span className="text-xs">h</span></span>
+                </div>
               </div>
             </div>
           </div>
-
-          {/* Temperaturas */}
-          <div className="bg-card border border-border rounded-xl p-4 xl:col-span-2 min-h-0">
-            <h2 className="text-lg font-semibold text-foreground mb-4">Temperaturas</h2>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 max-w-lg">
-              <div className="flex flex-col items-center justify-center">
-                <Gauge
-                  value={temperatures.inlet}
-                  max={thresholds.tempIn.max}
-                  size={140}
-                  thickness={8}
-                  label="Entrada"
-                  units="°C"
-                  level={inletTempLv}
-                  labelClassName="fill-foreground text-[9px] font-medium"
-                  valueClassName="text-xs font-semibold"
-                />
-              </div>
-              <div className="flex flex-col items-center justify-center">
-                <Gauge
-                  value={temperatures.outlet}
-                  max={thresholds.tempOut.max}
-                  size={140}
-                  thickness={8}
-                  label="Salida"
-                  units="°C"
-                  level={outletTempLv}
-                  labelClassName="fill-foreground text-[9px] font-medium"
-                  valueClassName="text-xs font-semibold"
-                />
-              </div>
-            </div>
-
-            <div className="mt-3 bg-muted/20 rounded-lg p-2 inline-flex items-center gap-2">
-              <span className="text-xs text-muted-foreground">ΔT</span>
-              <span className="text-sm font-bold text-primary">+{deltaTemp} °C</span>
-            </div>
-          </div>
         </div>
-        </div>
-        </div>
+      </div>
+    </div>
   );
 }
 
