@@ -92,19 +92,18 @@ export const SideNav = () => {
 
             <div
                 className={[
-                    "relative flex h-full text-sidebar-foreground flex-col bg-sidebar shadow-xl z-50",
-                    isCollapsed ? "w-16" : "w-full max-w-[16rem]",
+                    "sidebar-container relative flex h-full text-sidebar-foreground flex-col bg-sidebar shadow-xl z-50",
                     isMobile && !isCollapsed ? "fixed left-0 top-0 h-screen" : "",
                 ].join(" ")}
                 style={{
-                    transition: 'width 350ms ease-in-out',
+                    width: isCollapsed ? '64px' : '256px'
                 }}
             >
                 {/* Toggle Button */}
                 <div className={`flex items-center p-4 pb-2 ${isCollapsed ? 'justify-center' : 'justify-end'}`}>
                     <button
                         onClick={toggleCollapse}
-                        className="flex items-center justify-center h-8 w-8 rounded-md outline-none hover:bg-sidebar-accent hover:text-sidebar-accent-foreground"
+                        className="sidebar-toggle-btn flex items-center justify-center h-8 w-8 rounded-md outline-none hover:bg-sidebar-accent/60"
                         title={isCollapsed ? "Expandir menú" : "Colapsar menú"}
                     >
                         {isCollapsed ? <MdMenuOpen size={18} /> : <MdMenu size={18} />}

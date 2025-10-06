@@ -269,6 +269,42 @@ html, body {
   transform-origin: center;
 }
 
+/* Animación del sidebar - estilo simple y directo basado en tutorial */
+.sidebar-container {
+  height: 100%;
+  position: fixed;
+  z-index: 1;
+  top: 0;
+  left: 0;
+  overflow-x: hidden;
+  transition: width 0.5s; /* Transición de ancho simple de 0.5s como el tutorial */
+}
+
+/* Transición del contenido principal */
+.main-content {
+  transition: margin-left 0.5s; /* Sincronizado con el sidebar */
+}
+
+/* Animación simple del botón toggle */
+.sidebar-toggle-btn {
+  position: relative;
+  transition: 0.3s;
+}
+
+.sidebar-toggle-btn:hover {
+  background-color: var(--sidebar-accent);
+}
+
+.sidebar-toggle-btn:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+}
+
+/* Prevenir scroll horizontal en el body */
+body {
+  overflow-x: hidden;
+}
+
 /* Tooltip personalizado para items del sidebar colapsado */
 .sidebar-tooltip {
   position: absolute;
