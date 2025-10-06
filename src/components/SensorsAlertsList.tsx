@@ -116,7 +116,7 @@ const AlertRow = (alert: sensorInterface) => {
             }}
             className="px-4 py-2 text-sm font-medium bg-muted text-foreground border border-border hover:bg-muted/80 rounded-md transition-colors"
           >
-            Detalles
+            +
           </button>
         </div>
       </div>

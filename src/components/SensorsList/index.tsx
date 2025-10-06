@@ -145,14 +145,14 @@ export const SensorsList = ({data}: {data: sensorInterface[]}) => {
       {/* Header con título y botón limpiar filtros */}
       <div className="flex justify-between items-center flex-shrink-0">
         <h2 className="text-xl font-semibold text-foreground">Lista de Sensores</h2>
-        {!activeFilters.has("todos") && activeFilters.size > 0 && (
+       {/* {!activeFilters.has("todos") && activeFilters.size > 0 && (
           <button
             onClick={clearAllFilters}
             className="px-3 py-1 text-xs font-medium bg-red-100 text-red-700 rounded-md hover:bg-red-200 transition-colors dark:bg-red-900/20 dark:text-red-300 dark:hover:bg-red-900/30"
           >
             Limpiar filtros
           </button>
-        )}
+        )}*/}
       </div>
       
       {/* Filtros */}
@@ -237,7 +237,7 @@ export const SensorsList = ({data}: {data: sensorInterface[]}) => {
                         onClick={() => handleOnOpenModal(sensor)}
                         className="px-4 py-2 text-sm font-medium bg-muted text-foreground border border-border hover:bg-muted/80 rounded-md transition-colors"
                       >
-                        Detalles
+                        +
                       </button>
                     </div>
                   </div>

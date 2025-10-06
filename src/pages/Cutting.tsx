@@ -64,8 +64,8 @@ export const Cutting = () => {
       <h1 className="text-xl lg:text-2xl font-bold text-foreground p-3 lg:p-4 pb-2 flex-shrink-0">
         Sistema de Corte
       </h1>
-      <div className="flex-1 overflow-hidden px-3 lg:px-4 pb-3 lg:pb-4 min-h-0 flex items-center justify-center">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 lg:gap-6 max-w-6xl w-full">
+      <div className="flex-1 overflow-y-auto overflow-x-hidden px-3 lg:px-4 pb-4 min-h-0">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 lg:gap-6 max-w-6xl w-full mx-auto py-4">
         {/* Left Card: imagen con animación y toggle de UI */}
         <div className="bg-card border border-border rounded-xl p-6 flex items-center justify-center">
           <div className="text-center space-y-3">

@@ -100,8 +100,8 @@ export const Hydraulic = () => {
         <h1 className="text-xl lg:text-2xl font-bold text-foreground p-3 lg:p-4 pb-2 flex-shrink-0">
           Sistema Hidráulico
         </h1>
-        <div className="flex-1 overflow-hidden px-3 lg:px-4 pb-3 lg:pb-4 min-h-0">
-        <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-3 lg:gap-4 h-full overflow-y-auto overflow-x-hidden">
+        <div className="flex-1 overflow-y-auto overflow-x-hidden px-3 lg:px-4 pb-4 min-h-0">
+        <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-3 lg:gap-4">
           {/* Presiones del sistema */}
           <div className="bg-card border border-border rounded-xl p-4 xl:col-span-2 min-h-0">
             <div className="flex items-center justify-between mb-4">

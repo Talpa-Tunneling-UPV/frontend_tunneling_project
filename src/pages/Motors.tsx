@@ -326,7 +326,7 @@ export function Motors() {
       <h1 className="text-xl lg:text-2xl font-bold text-foreground p-3 lg:p-4 pb-2 flex-shrink-0">
         Motores
       </h1>
-      <div className="flex-1 overflow-hidden p-3 lg:p-4 min-h-0">
+      <div className="flex-1 overflow-hidden px-3 lg:px-4 pb-4 min-h-0">
         <div className="h-full w-full rounded-lg overflow-hidden border border-border">
           <MapContainer
         crs={CRS.Simple}

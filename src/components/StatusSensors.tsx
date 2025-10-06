@@ -79,7 +79,7 @@ export const StatusSensors = ({ data }: { data: sensorInterface[]}) => {
             <div className='grid grid-cols-2 gap-4 flex-1'>
                 {
                     sensors.map( sensor => (
-                        <div key={sensor.title} className={`rounded-lg p-4 text-center border transition-all hover:scale-105 ${getCardStyles(sensor.status)}`}>
+                        <div key={sensor.title} className={`rounded-lg p-4 text-center border transition-all ${getCardStyles(sensor.status)}`}>
                             <div className="text-lg font-bold">{ sensor.title }</div>
                             <div className={`text-2xl font-bold mt-2 ${getTextStyles(sensor.status)}`}>{ data.filter(el => el.status === sensor.status).length }</div>
                         </div>

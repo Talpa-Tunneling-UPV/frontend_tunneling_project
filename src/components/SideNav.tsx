@@ -92,53 +92,35 @@ export const SideNav = () => {
 
             <div
                 className={[
-                    "relative flex h-full text-sidebar-foreground flex-col bg-sidebar bg-clip-border shadow-xl sidebar-width-transition z-50",
-                    isCollapsed ? "w-16 overflow-hidden" : "w-full max-w-[16rem] overflow-hidden",
+                    "relative flex h-full text-sidebar-foreground flex-col bg-sidebar shadow-xl z-50",
+                    isCollapsed ? "w-16" : "w-full max-w-[16rem]",
                     isMobile && !isCollapsed ? "fixed left-0 top-0 h-screen" : "",
-                    "transition-all duration-500 ease-out"
                 ].join(" ")}
+                style={{
+                    transition: 'width 350ms ease-in-out',
+                }}
             >
                 {/* Toggle Button */}
-                <div className="flex justify-between items-center p-4 pb-2">
-                    {!isCollapsed && <div className="h-2" />}
+                <div className={`flex items-center p-4 pb-2 ${isCollapsed ? 'justify-center' : 'justify-end'}`}>
                     <button
                         onClick={toggleCollapse}
-                        className={[
-                            "flex items-center justify-center h-8 w-8 rounded-md outline-none",
-                            "transition-all duration-500 cubic-bezier(0.23, 1, 0.32, 1)",
-                            "hover:bg-sidebar-accent hover:text-sidebar-accent-foreground hover:scale-110",
-                            "focus-visible:ring-2 ring-offset-2 ring-sidebar-ring/70 ring-offset-sidebar/40",
-                            "active:scale-90",
-                            isCollapsed ? "mx-auto" : "ml-auto"
-                        ].join(" ")}
+                        className="flex items-center justify-center h-8 w-8 rounded-md outline-none hover:bg-sidebar-accent hover:text-sidebar-accent-foreground"
                         title={isCollapsed ? "Expandir menú" : "Colapsar menú"}
                     >
-                        <span className="transition-all duration-500 cubic-bezier(0.23, 1, 0.32, 1) transform">
-                            {isCollapsed ? <MdMenuOpen size={18} /> : <MdMenu size={18} />}
-                        </span>
+                        {isCollapsed ? <MdMenuOpen size={18} /> : <MdMenu size={18} />}
                     </button>
                 </div>
 
-                <nav className={[
-                    "flex flex-col gap-1 p-2 font-sans text-base font-normal text-blue-gray-700 overflow-y-auto overflow-x-hidden sidebar-nav-transition",
-                    isCollapsed ? "px-1" : "px-2"
-                ].join(" ")}>
+                <nav className={`flex flex-col gap-1 p-2 font-sans text-base font-normal overflow-y-auto ${isCollapsed ? 'px-1' : 'px-2'}`}>
                     {
                         listElements.map(element => (
                             <NavLink
                                 key={element.url}
                                 to={element.url}
                                 className={({ isActive }) =>
-                                    [
-                                        "sidebar-item group relative flex items-center w-full rounded-lg outline-none",
-                                        "transition-all duration-500 cubic-bezier(0.23, 1, 0.32, 1)",
-                                        "focus-visible:ring-2 ring-offset-2 ring-sidebar-ring/70 ring-offset-sidebar/40",
-                                        "hover:scale-[1.03] active:scale-[0.97]",
-                                        isActive
-                                            ? "bg-primary/10 text-sidebar-foreground hover:bg-primary/15"
-                                            : "hover:bg-sidebar-accent hover:text-sidebar-accent-foreground",
-                                        isCollapsed ? "gap-0 px-2 py-2 justify-center" : "gap-3 px-3 py-2"
-                                    ].join(" ")
+                                    `group relative flex items-center w-full rounded-lg outline-none hover:bg-sidebar-accent hover:text-sidebar-accent-foreground ${
+                                        isActive ? 'bg-primary/10 text-sidebar-foreground' : ''
+                                    } ${isCollapsed ? 'gap-0 px-2 py-2 justify-center' : 'gap-3 px-3 py-2'}`
                                 }
                                 onClick={() => {
                                     if (isMobile && !isCollapsed) {
@@ -149,38 +131,26 @@ export const SideNav = () => {
                             >
                                 {({ isActive }) => (
                                     <>
-                                        {/* Active left indicator - solo visible cuando no está colapsado */}
-                                        {!isCollapsed && (
-                                            <span
-                                                className={[
-                                                    "absolute left-1 top-1/2 -translate-y-1/2 h-6 w-1 rounded-full",
-                                                    "transition-all duration-500 cubic-bezier(0.23, 1, 0.32, 1)",
-                                                    isActive 
-                                                        ? "bg-primary opacity-100 scale-100" 
-                                                        : "bg-primary/50 opacity-0 scale-75 group-hover:opacity-60 group-hover:scale-90",
-                                                ].join(" ")}
-                                            />
+                                        {/* Active indicator */}
+                                        {!isCollapsed && isActive && (
+                                            <span className="absolute left-1 top-1/2 -translate-y-1/2 h-6 w-1 rounded-full bg-primary" />
                                         )}
+                                        
                                         {/* Icon */}
-                                        <span
-                                            className={[
-                                                "grid place-items-center h-8 w-8 rounded-md flex-shrink-0",
-                                                "transition-all duration-500 cubic-bezier(0.23, 1, 0.32, 1)",
-                                                "group-hover:scale-110",
-                                                isActive ? "bg-primary text-primary-foreground" : "bg-sidebar-accent/50 text-sidebar-foreground",
-                                            ].join(" ")}
-                                        >
-                                            <span className="transition-all duration-500 cubic-bezier(0.23, 1, 0.32, 1) group-hover:rotate-6">
-                                                <element.icon size={18} />
-                                            </span>
+                                        <span className={`grid place-items-center h-8 w-8 rounded-md flex-shrink-0 ${
+                                            isActive ? 'bg-primary text-primary-foreground' : 'bg-sidebar-accent/50 text-sidebar-foreground'
+                                        }`}>
+                                            <element.icon size={18} />
                                         </span>
-                                        {/* Label - solo visible cuando no está colapsado */}
+                                        
+                                        {/* Label */}
                                         {!isCollapsed && (
-                                            <span className="truncate text-[0.95rem] leading-none sidebar-content-transition">
+                                            <span className="truncate text-[0.95rem] leading-none">
                                                 {element.title}
                                             </span>
                                         )}
-                                        {/* Tooltip personalizado para estado colapsado */}
+                                        
+                                        {/* Tooltip */}
                                         {isCollapsed && !isMobile && (
                                             <div className="sidebar-tooltip">
                                                 {element.title}
@@ -192,10 +162,10 @@ export const SideNav = () => {
                         ))}
                 </nav>
 
-                {/* Footer - solo visible cuando no está colapsado */}
+                {/* Footer */}
                 {!isCollapsed && (
-                    <footer className="mt-auto pt-3 px-3 text-xs text-muted-foreground/80 sidebar-content-transition">
-                        <div className="border-t border-sidebar-border/60 pt-3 transition-all duration-300 ease-out">
+                    <footer className="mt-auto pt-3 px-3 text-xs text-muted-foreground/80">
+                        <div className="border-t border-sidebar-border/60 pt-3">
                             <span>v1.0 • © UPV</span>
                         </div>
                     </footer>

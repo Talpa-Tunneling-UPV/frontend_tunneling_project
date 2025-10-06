@@ -92,7 +92,7 @@ function Home() {
       <h1 className="text-xl lg:text-2xl font-bold text-foreground p-3 lg:p-4 pb-2 flex-shrink-0">
         Dashboard
       </h1>
-      <div className="flex-1 overflow-hidden px-3 lg:px-4 pb-3 lg:pb-4 min-h-0">
+      <div className="flex-1 overflow-y-auto overflow-x-hidden px-3 lg:px-4 pb-4 min-h-0">
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 flex-shrink-0 mb-3 dashboard-metrics">
           {DEMO_METRICS.map(metric => (
             <div key={metric.title} className="rounded-lg border border-accent bg-card text-card-foreground shadow">
@@ -111,18 +111,18 @@ function Home() {
           ))}
         </div>
         
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-3 flex-1 min-h-0 overflow-hidden" style={{ height: 'calc(100vh - 200px)' }}>
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-3" style={{ minHeight: '600px' }}>
           {/* Columna izquierda: Vistas de cabeza de corte y lateral */}
-          <div className="min-h-0" style={{ height: '100%' }}>
+          <div className="min-h-0" style={{ height: '600px' }}>
             <div className="h-full flex flex-col">
-              <div className="flex-1 min-h-0" style={{ minHeight: '500px' }}>
+              <div className="flex-1 min-h-0">
                 <CuttingHeadMap />
               </div>
             </div>
           </div>
           
           {/* Columna derecha: Alertas y eventos unificados */}
-          <div className="min-h-0" style={{ height: '100%' }}>
+          <div className="min-h-0" style={{ height: '600px' }}>
             <UnifiedAlertsAndEvents sensors={DEMO_SENSORS} events={events} />
           </div>
         </div>
